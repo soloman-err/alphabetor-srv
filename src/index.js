@@ -1,12 +1,14 @@
 const express = require('express');
 const { connectToDatabase } = require('../config/database');
 
+const jwtRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const courseRouter = require('./routes/course');
 const { logReqRes } = require('./middlewares');
 
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const User = require('./models/user');
 require('dotenv').config();
 const app = express();
 const port = 2000;
@@ -18,18 +20,12 @@ connectToDatabase('mongodb://127.0.0.1:27017/alphabetor').then(() =>
 
 // Middleware:
 app.use(cors());
-app.use(express());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(logReqRes('log.txt'));
 
 // JWT:
-app.post('/jwt', (req, res) => {
-  const user = req.body;
-  const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '1h',
-  });
-  res.send({ token });
-});
+app.use('/jwt', jwtRouter);
 
 // Users:
 app.use('/api/users', userRouter);

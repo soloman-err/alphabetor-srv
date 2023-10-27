@@ -1,4 +1,4 @@
-const { User, Teacher } = require('../models/user');
+const User = require('../models/user');
 
 const handleGetAllUsers = async (req, res) => {
   try {
@@ -46,31 +46,19 @@ const handleDeleteUserById = async (req, res) => {
 
 const handleCreateNewUser = async (req, res) => {
   try {
-    const {
-      firstName,
-      lastName,
-      phone,
-      address,
-      city,
-      state,
-      zip,
-      acceptTerms,
-      ...otherFields
-    } = req.body;
+    const user = new User(req.body);
 
-    const user = new User({
-      firstName,
-      lastName,
-      phone,
-      address,
-      city,
-      state,
-      zip,
-      acceptTerms,
-      ...otherFields,
-    });
+    if (!user?.email) {
+      return res.status(400).json({ errors: ['Email is required'] });
+    }
 
-    // Validate user data:
+    const existingUser = await User.findOne({ email: user.email });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ errors: ['Email already used in another account!'] });
+    }
+
     const validationError = user.validateSync();
     if (validationError) {
       const errors = Object.keys(validationError.errors).map(
@@ -80,11 +68,10 @@ const handleCreateNewUser = async (req, res) => {
     }
 
     await user.save();
-
-    res.status(201).json({ message: 'User registered successfully!' });
+    return res.status(201).json({ message: 'User created successfully!' });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err: 'Internal server error!' });
+    console.error(err);
+    return res.status(500).json({ errors: ['Server error'] });
   }
 };
 

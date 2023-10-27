@@ -1,50 +1,49 @@
 const mongoose = require('mongoose');
 
-// mongoose.connect('mongodb://localhost:27017/alphabetor');
-
-const teacherSchema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
+const userSchema = new mongoose.Schema({
+  firstName: {
+    type: String,
+    // required: true,
+  },
+  lastName: {
+    type: String,
+    // required: true,
+  },
   email: {
     type: String,
-    required: true,
+    // required: true,
     unique: true,
   },
   password: {
     type: String,
-    required: true,
+    // required: true,
   },
-  phone: String,
-  address: String,
-  city: String,
-  state: String,
-  zip: String,
+  phone: {
+    type: String,
+    // required: true,
+  },
+  address: {
+    type: String,
+    // required: true,
+  },
+  city: {
+    type: String,
+    // required: true,
+  },
+  state: {
+    type: String,
+    // required: true,
+  },
+  zip: {
+    type: String,
+    // required: true,
+  },
+  acceptTerms: {
+    type: Boolean,
+    // required: true,
+  },
 });
 
-const studentSchema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  grade: String,
-  school: String,
-  address: String,
-  city: String,
-  state: String,
-  zip: String,
-});
+const User = mongoose.model('User', userSchema);
 
-const Teacher = mongoose.model('Teacher', teacherSchema);
-const Student = mongoose.model('Student', studentSchema);
-
-module.exports = {
-  Teacher,
-  Student,
-};
+module.exports = User;
