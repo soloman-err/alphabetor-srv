@@ -9,12 +9,13 @@ const {
 
 const router = express.Router();
 
-router.route('/').get(handleGetAllUsers).post(handleCreateNewUser);
-
 router
   .route('/:id')
   .get(handleGetUserById)
   .patch(handleUpdateUserById)
   .delete(handleDeleteUserById);
+
+router.route('/register').get(handleCreateNewUser);
+router.route('/allUsers').get(handleGetAllUsers);
 
 module.exports = router;

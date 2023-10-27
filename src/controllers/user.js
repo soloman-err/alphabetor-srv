@@ -1,4 +1,4 @@
-const { User } = require('../models/user');
+const { User, Teacher } = require('../models/user');
 
 const handleGetAllUsers = async (req, res) => {
   try {
@@ -45,25 +45,46 @@ const handleDeleteUserById = async (req, res) => {
 };
 
 const handleCreateNewUser = async (req, res) => {
-  const body = req.body;
-  console.log('New user:', body);
-
-  if (!body || !body?.name || !body?.email || !body?.jobTitle) {
-    return res.status(400).json({ msg: 'All fields are required!' });
-  }
-
   try {
-    const result = await User?.create({
-      name: body?.name,
-      email: body?.email,
-      jobTitle: body?.jobTitle,
+    const {
+      firstName,
+      lastName,
+      phone,
+      address,
+      city,
+      state,
+      zip,
+      acceptTerms,
+      ...otherFields
+    } = req.body;
+
+    const user = new User({
+      firstName,
+      lastName,
+      phone,
+      address,
+      city,
+      state,
+      zip,
+      acceptTerms,
+      ...otherFields,
     });
 
-    console.log('result', result);
-    return res.status(201).json({ msg: 'success!', id: result?._id });
+    // Validate user data:
+    const validationError = user.validateSync();
+    if (validationError) {
+      const errors = Object.keys(validationError.errors).map(
+        (key) => validationError.errors[key].message
+      );
+      return res.status(400).json({ errors });
+    }
+
+    await user.save();
+
+    res.status(201).json({ message: 'User registered successfully!' });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.log(err);
+    res.status(500).json({ err: 'Internal server error!' });
   }
 };
 
