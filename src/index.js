@@ -28,10 +28,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/jwt', jwtRouter);
 
 // Users:
-app.use('/api/users', userRouter);
+app.use('/users', userRouter);
 
 // Courses:
-app.use('/api/courses', courseRouter);
+app.use('/courses', courseRouter);
 
 // Default Server Response:
 app.get('/', (req, res) => {

@@ -2,12 +2,11 @@ const User = require('../models/user');
 
 const handleGetAllUsers = async (req, res) => {
   try {
-    const allDBUsers = await User?.find({});
-    console.log(allDBUsers);
-    return res.json(allDBUsers);
+    const allUsers = await User.find({});
+    return res.json(allUsers);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ err: 'Internal server error' });
+    console.error(err);
+    throw new Error('Error retrieving users');
   }
 };
 
