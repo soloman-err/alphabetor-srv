@@ -32,6 +32,9 @@ const userSchema = new mongoose.Schema({
   acceptTerms: {
     type: Boolean,
   },
+  role: {
+    type: String,
+  },
 });
 
 const User = mongoose.model('User', userSchema);
