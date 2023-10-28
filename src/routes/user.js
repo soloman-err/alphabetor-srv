@@ -10,7 +10,7 @@ const {
 const router = express.Router();
 
 router.route('/all-users').get(handleGetAllUsers);
-// router.route('/register').post(handleCreateNewUser);
+router.route('/register').post(handleCreateNewUser);
 
 router
   .route('/:id')

@@ -34,36 +34,36 @@ app.post('/jwt', (req, res) => {
 // Users:
 app.use('/users', userRouter);
 
-app.post('/users/register', async (req, res) => {
-  try {
-    const user = new User(req.body);
+// app.post('/users/register', async (req, res) => {
+//   try {
+//     const user = new User(req.body);
 
-    if (!user?.email) {
-      return res.status(400).json({ errors: ['Email is required'] });
-    }
+//     if (!user?.email) {
+//       return res.status(400).json({ errors: ['Email is required'] });
+//     }
 
-    const existingUser = await User.findOne({ email: user.email });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ errors: ['Email already used in another account!'] });
-    }
+//     const existingUser = await User.findOne({ email: user.email });
+//     if (existingUser) {
+//       return res
+//         .status(400)
+//         .json({ errors: ['Email already used in another account!'] });
+//     }
 
-    const validationError = user.validateSync();
-    if (validationError) {
-      const errors = Object.keys(validationError.errors).map(
-        (key) => validationError.errors[key].message
-      );
-      return res.status(400).json({ errors });
-    }
+//     const validationError = user.validateSync();
+//     if (validationError) {
+//       const errors = Object.keys(validationError.errors).map(
+//         (key) => validationError.errors[key].message
+//       );
+//       return res.status(400).json({ errors });
+//     }
 
-    await user.save();
-    return res.status(201).json({ message: 'User created successfully!' });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ errors: ['Server error'] });
-  }
-});
+//     await user.save();
+//     return res.status(201).json({ message: 'User created successfully!' });
+//   } catch (err) {
+//     console.error(err);
+//     return res.status(500).json({ errors: ['Server error'] });
+//   }
+// });
 
 app.patch('/users/update-role/:email', async (req, res) => {
   try {

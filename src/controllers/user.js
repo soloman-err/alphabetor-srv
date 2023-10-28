@@ -56,6 +56,7 @@ const handleDeleteUserById = async (req, res) => {
 const handleCreateNewUser = async (req, res) => {
   try {
     const user = new User(req.body);
+    user.createdAt = new Date();
 
     if (!user?.email) {
       return res.status(400).json({ errors: ['Email is required'] });
