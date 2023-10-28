@@ -23,13 +23,23 @@ const handleGetUserById = async (req, res) => {
 
 const handleUpdateUserById = async (req, res) => {
   try {
-    await User?.findByIdAndUpdate(req.params.id, {
-      email: ' ',
-    });
+    const { email } = req.body;
+    const { id } = req.params;
+
+    if (!email || !email.trim()) {
+      return res.status(400).json({ error: 'Email is required!' });
+    }
+
+    const user = await User.findByIdAndUpdate(id, { email }, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
     return res.json({ status: 'Success' });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ err: 'Internal server error' });
+    console.error(err);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
