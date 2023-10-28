@@ -15,7 +15,7 @@ router.route('/register').post(handleCreateNewUser);
 router
   .route('/:id')
   .get(handleGetUserById)
-  .patch(handleUpdateUserById)
+  // .patch(handleUpdateUserById)
   .delete(handleDeleteUserById);
 
 module.exports = router;

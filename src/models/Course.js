@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Schema:
 const courseSchema = new mongoose.Schema({
   courseId: {
     type: String,
