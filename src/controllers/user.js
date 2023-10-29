@@ -23,24 +23,46 @@ const handleGetUserById = async (req, res) => {
 
 const handleUpdateUserById = async (req, res) => {
   try {
-    const { email } = req.body;
-    const { id } = req.params;
+    const { email } = req.params;
+    const { role } = req.body;
+    console.log('Received email at index:', email);
 
     if (!email || !email.trim()) {
       return res.status(400).json({ error: 'Email is required!' });
     }
 
-    const user = await User.findByIdAndUpdate(id, { email }, { new: true });
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email },
+      { role: role }
+    );
 
-    if (!user) {
+    console.log('Role updated:', updatedUser);
+
+    if (!updatedUser) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    return res.json({ status: 'Success' });
+    return res.json({ status: 'Success', user: updatedUser });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Internal server error' });
   }
+
+  // try {
+  //   const { email } = req.body;
+  //   const { id } = req.params;
+  //   if (!email || !email.trim()) {
+  //     return res.status(400).json({ error: 'Email is required!' });
+  //   }
+  //   const user = await User.findByIdAndUpdate(id, { email }, { new: true });
+  //   if (!user) {
+  //     return res.status(404).json({ error: 'User not found' });
+  //   }
+  //   return res.json({ status: 'Success' });
+  // } catch (err) {
+  //   console.error(err);
+  //   return res.status(500).json({ error: 'Internal server error' });
+  // }
 };
 
 const handleDeleteUserById = async (req, res) => {
@@ -63,6 +85,7 @@ const handleCreateNewUser = async (req, res) => {
     }
 
     const existingUser = await User.findOne({ email: user.email });
+
     if (existingUser) {
       return res
         .status(400)

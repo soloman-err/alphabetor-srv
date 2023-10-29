@@ -65,30 +65,36 @@ app.use('/users', userRouter);
 //   }
 // });
 
-app.patch('/users/update-role/:email', async (req, res) => {
-  try {
-    const { email } = req.params;
-    const { role } = req.body;
-    console.log('Received email:', email);
+// app.patch('/users/:email', async (req, res) => {
+//   try {
+//     const { email } = req.params;
+//     const { role } = req.body;
+//     console.log('Received email at index:', email);
 
-    if (!email || !email.trim()) {
-      return res.status(400).json({ error: 'Email is required!' });
-    }
+//     if (!email || !email.trim()) {
+//       return res.status(400).json({ error: 'Email is required!' });
+//     }
 
-    const user = await User.findOneAndUpdate({ email: email }, { role: role });
+//     const updatedUser = await User.findOneAndUpdate(
+//       { email: email },
+//       { role: role }
+//     );
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+//     console.log('Role updated:', updatedUser);
 
-    return res.json({ status: 'Success' });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-});
+//     if (!updatedUser) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+
+//     return res.json({ status: 'Success', user: updatedUser });
+//   } catch (err) {
+//     console.error(err);
+//     return res.status(500).json({ error: 'Internal server error' });
+//   }
+// });
 
 // Courses:
+
 app.use('/courses', courseRouter);
 
 // Default Server Response:
